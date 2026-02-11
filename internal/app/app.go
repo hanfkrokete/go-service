@@ -2,8 +2,10 @@ package app
 
 import (
 	"context"
+
 	"github.com/hanfkrokete/go-service/internal/config"
 	httpserver "github.com/hanfkrokete/go-service/internal/http"
+	"github.com/hanfkrokete/go-service/internal/http/middleware"
 )
 
 type App struct {
@@ -11,8 +13,12 @@ type App struct {
 }
 
 func New(cfg config.Config) *App {
+	router := httpserver.NewRouter()
+	routerWithMiddleware := middleware.Logging(router)
+	server := httpserver.New(cfg.Port, routerWithMiddleware)
+
 	return &App{
-		HTTPServer: httpserver.New(cfg.Port),
+		HTTPServer: server,
 	}
 }
 

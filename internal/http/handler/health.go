@@ -5,11 +5,11 @@ import (
 	"net/http"
 )
 
-func Health(w http.ResponseWriter, r *http.Request) {
-	resp := map[string]string{
-		"status": "ok",
-	}
+type HealthResponse struct {
+	Status string `json:"status"`
+}
 
+func Health(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(resp)
+	json.NewEncoder(w).Encode(HealthResponse{Status: "ok"})
 }
